@@ -35,6 +35,11 @@
             : filterState === "completed"
             ? todos.filter((t) => t.completed)
             : todos;
+
+    function updateTodo(todo) {
+        const i = todos.findIndex((t) => t.id === todo.id);
+        todos[i] = { ...todos[i], ...todo };
+    }
 </script>
 
 <!-- MARK UP START HERE -->
@@ -75,7 +80,11 @@
         {#each filterTodos(filterState, todos) as todo (todo.id)}
             <li class="todo">
                 <!-- To-do Item -->
-                <Todo {todo} on:remove={(e) => removeTodo(e.detail)} />
+                <Todo
+                    {todo}
+                    on:update={(e) => updateTodo(e.detail)}
+                    on:remove={(e) => removeTodo(e.detail)}
+                />
             </li>
         {:else}
             <li>Nothing to do here!</li>

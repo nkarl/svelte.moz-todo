@@ -43,6 +43,44 @@
 <div class="stack-small">
     {#if editing}
         <!-- markup for editing to-do: label, input text, Cancel and Save Button -->
+        <form
+            on:submit|preventDefault={onSave}
+            class="stack-small"
+            on:keydown={(e) => e.key === "Escape" && onCancel()}
+        >
+            <div class="form-group">
+                <label for="todo-{todo.id}" class="todo-label"
+                    >New name for '{todo.name}'</label
+                >
+                <input
+                    bind:value={name}
+                    type="text"
+                    id="todo-{todo.id}"
+                    autoComplete="off"
+                    class="todo-text"
+                />
+            </div>
+            <div class="btn-group">
+                <button
+                    class="btn todo-cancel"
+                    on:click={onCancel}
+                    type="button"
+                >
+                    Cancel<span class="visually-hidden"
+                        >renaming {todo.name}</span
+                    >
+                </button>
+                <button
+                    class="btn btn__primary todo-edit"
+                    type="submit"
+                    disabled={!name}
+                >
+                    Save<span class="visually-hidden"
+                        >new name for {todo.name}</span
+                    >
+                </button>
+            </div>
+        </form>
     {:else}
         <!-- markup for displaying to-do: checkbox, label, Edit and Delete Button -->
         <div class="c-cb">
