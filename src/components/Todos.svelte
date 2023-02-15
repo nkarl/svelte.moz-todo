@@ -24,6 +24,14 @@
             newTodoId = Math.max(...todos.map((t) => t.id)) + 1;
         }
     }
+
+    let status = "all";
+    const filterTodos = (filter, todos) =>
+        filter === "active"
+            ? todos.filter((t) => !t.completed)
+            : filter === "completed"
+            ? todos.filter((t) => t.completed)
+            : todos;
 </script>
 
 <div class="todoapp stack-large">
@@ -48,17 +56,32 @@
 
     <!-- Filter -->
     <div class="filters btn-group stack-exception">
-        <button class="btn toggle-btn" aria-pressed="true">
+        <button
+            class="btn toggle-btn"
+            class:btn__primary={status === "all"}
+            aria-pressed={status === "all"}
+            on:click={() => (status = "all")}
+        >
             <span class="visually-hidden">Show</span>
             <span>All</span>
             <span class="visually-hidden">tasks</span>
         </button>
-        <button class="btn toggle-btn" aria-pressed="false">
+        <button
+            class="btn toggle-btn"
+            class:btn__primary={status === "active"}
+            aria-pressed={status === "active"}
+            on:click={() => (status = "active")}
+        >
             <span class="visually-hidden">Show</span>
             <span>Active</span>
             <span class="visually-hidden">tasks</span>
         </button>
-        <button class="btn toggle-btn" aria-pressed="false">
+        <button
+            class="btn toggle-btn"
+            class:btn__primary={status === "completed"}
+            aria-pressed={status === "completed"}
+            on:click={() => (status = "completed")}
+        >
             <span class="visually-hidden">Show</span>
             <span>Completed</span>
             <span class="visually-hidden">tasks</span>
@@ -70,14 +93,13 @@
         {completedTodos} out of {totalTodos} items completed
     </h2>
 
-    <!-- Todos -->
     <!-- To-dos -->
     <ul
         role="list"
         class="todo-list stack-large"
         aria-labelledby="list-heading"
     >
-        {#each todos as todo (todo.id)}
+        {#each filterTodos(status, todos) as todo (todo.id)}
             <li class="todo">
                 <div class="stack-small">
                     <div class="c-cb">
